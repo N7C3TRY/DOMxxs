@@ -1,3 +1,1 @@
-// payload.js
-console.log("Payload loaded");
-alert("You’ve been XSS’d");
+<script>alert("Hello! This is a test alert.");</script>
